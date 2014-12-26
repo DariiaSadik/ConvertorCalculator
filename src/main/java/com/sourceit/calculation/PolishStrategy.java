@@ -1,7 +1,9 @@
 package com.sourceit.calculation;
 
 
+import com.sourceit.exceptions.ConversionException;
 import com.sourceit.exceptions.WrongCalculationOperator;
+import com.sourceit.functions.ConversionImpl;
 import com.sourceit.models.Currency;
 import com.sourceit.operators.*;
 
@@ -62,35 +64,36 @@ public class PolishStrategy {
         return op.eval((Currency) o1, (Double) o2);
     }
 
-    public static Object eval(String s) throws WrongCalculationOperator { // вводим выражение
+    public static Object eval(String s) throws WrongCalculationOperator, ConversionException { // вводим выражение
         LinkedList<Object> st = new LinkedList<Object>(); // сюда наваливают цифры
         LinkedList<Character> op = new LinkedList<Character>(); // сюда опрераторы и st и op в порядке поступления
 
         for (int i = 0; i < s.length(); i++) { // парсим строку с выражением и вычисляем
             char c = s.charAt(i);
-
             if (isDelim(c))
                 continue;
-
-            if (c == '(')
+            String conversion = "";
+            if(Character.isAlphabetic(s.charAt(i))) {
+                while (i < s.length() && Character.isAlphabetic(s.charAt(i))) {
+                    conversion += s.charAt(i++);
+                }
                 op.add('(');
-
-            else if (c == ')') {
-                while (op.getLast() != '(')
-                    processOperator(st,op.removeLast());
-
-                op.removeLast();
-
-            } else if (isOperator(c)) {
-
-                while (!op.isEmpty() && priority(op.getLast()) >= priority(c))
+            } else if (c == ')') {
+                while (op.getLast()  != '(') {
                     processOperator(st, op.removeLast());
+                    // function()
+                    st.add(new ConversionImpl().converting((Currency) st.get(i), conversion));
+                }
+                op.removeLast();
+            } else if (isOperator(c)) {
+                while (!op.isEmpty() && priority(op.getLast()) >= priority(c)) {
+                    processOperator(st, op.removeLast());
+                }
                 op.add(c);
-
             } else {
                 String value = "";
                 String type = "";
-                while (i < s.length() && isNotCurrency(s.charAt(i))){
+                while (i < s.length() && !isNotCurrency(s.charAt(i))) {
                     if (s.charAt(i) == '.' || Character.isDigit(s.charAt(i))) {
                         value += s.charAt(i++);
                     } else {
@@ -108,13 +111,13 @@ public class PolishStrategy {
             }
         }
 
-        while (!op.isEmpty())
+        while (!op.isEmpty()) {
             processOperator(st, op.removeLast());
-
+        }
         return st.get(0);  // возврат результата
     }
 
-    public static void main(String[] args) throws WrongCalculationOperator {
-        System.out.println(eval("(5euro-1euro))+(10euro-1euro)"));
+    public static void main(String[] args) throws WrongCalculationOperator, ConversionException {
+        System.out.println(eval("toDollar(5euro)"));
     }
 }

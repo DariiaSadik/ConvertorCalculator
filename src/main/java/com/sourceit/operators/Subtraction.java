@@ -9,7 +9,7 @@ public class Subtraction implements StandardMathOperator {
         if(!cur1.getType().equals(cur2.getType())){
             throw new WrongCalculationOperator("Different currencies cannot be subtracted") ;
         }
-        return new Currency(cur1.getType(),cur1.getValue() - cur2.getValue());
+        return new Currency(cur1.getType(),cur2.getValue() - cur1.getValue());
     }
 
     @Override
