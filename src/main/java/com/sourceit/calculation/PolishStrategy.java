@@ -90,7 +90,7 @@ public class PolishStrategy {
                 while (!op.isEmpty() && priority(op.getLast()) >= priority(c)) {
                     processOperator(st, op.removeLast());
                 }
-                op.add(c);
+                op.add(c);  // test
             } else {
                 String value = "";
                 String type = "";

@@ -1,1 +1,2 @@
 toDollar $X euro=0.81 UAN=15.77;
+toEuro $X euro=0.81 UAN=15.77;

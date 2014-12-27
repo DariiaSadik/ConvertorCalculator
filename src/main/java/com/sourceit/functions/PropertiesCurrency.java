@@ -25,12 +25,11 @@ public class PropertiesCurrency {
 
         String[] items;
         String[] rate;
-        LinkedList<String> format = new LinkedList<>();
-        Map<String, Double> rates = new HashMap<>();
+
         String temp;
         for (int i = 0; i < line.length; i++){
-            format.clear();
-            rates.clear();
+            LinkedList<String> format = new LinkedList<>();
+            Map<String, Double> rates = new HashMap<>();
             temp = line[i];
             items = temp.split(" ");
             format.add(items[0]);
@@ -44,7 +43,7 @@ public class PropertiesCurrency {
 //            System.out.println(rates.toString());
 //            System.out.println("Add");
             function.put(format, rates);
-//            System.out.println(function.toString());
+            System.out.println(function.toString());
         }
         return function;
     }
