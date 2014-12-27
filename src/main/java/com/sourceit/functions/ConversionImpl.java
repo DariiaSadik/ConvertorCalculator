@@ -13,10 +13,15 @@ public class ConversionImpl implements Conversion {
         if(function.equals(parseMap.getFunction())){
             String key = cur1.getType();
             if (mapToOperation.containsKey(key)){
-               return new Currency(cur1.getType(), cur1.getValue()/mapToOperation.get(key));
+               return new Currency(parseMap.getFormat().replace('X', ' ').trim(),
+                       cur1.getValue()/mapToOperation.get(key));
             } else {
                 throw new ConversionException("Error");
             }
         } else throw new ConversionException("Error");
+    }
+
+    public static void main(String[] args) throws ConversionException {
+        System.out.println(new ConversionImpl().converting(new Currency("euro", 10), "toDollar"));
     }
 }

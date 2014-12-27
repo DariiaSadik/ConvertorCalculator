@@ -80,9 +80,10 @@ public class PolishStrategy {
                 op.add('(');
             } else if (c == ')') {
                 while (op.getLast()  != '(') {
+                    st.add(new ConversionImpl().converting((Currency) st.get(i), conversion));
                     processOperator(st, op.removeLast());
                     // function()
-                    st.add(new ConversionImpl().converting((Currency) st.get(i), conversion));
+
                 }
                 op.removeLast();
             } else if (isOperator(c)) {
