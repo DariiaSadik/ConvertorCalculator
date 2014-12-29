@@ -38,17 +38,12 @@ public class PropertiesCurrency {
                 rate = items[j].split("=");
                 rates.put(rate[0], Double.parseDouble(rate[1]));
             }
-//            System.out.println(format.toString());
-//            System.out.println();
-//            System.out.println(rates.toString());
-//            System.out.println("Add");
             function.put(format, rates);
-            System.out.println(function.toString());
         }
         return function;
     }
     public static void main(String[] args) {
         PropertiesCurrency test = new PropertiesCurrency();
-        test.parseString();
+        System.out.println(test.parseString());
     }
 }
