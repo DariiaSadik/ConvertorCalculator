@@ -1,2 +1,3 @@
-toDollar $X euro=0.81 UAN=15.77;
-toEuro Xeuro $=1.22 UAN=19.27;
+toDollar $X euro=0.8198737 UAN=15.768556;
+toEuro Xeuro $=1.2197000 UAN=19.232908;
+toUAN XUAN $=0.0634173 euro=0.0519942;

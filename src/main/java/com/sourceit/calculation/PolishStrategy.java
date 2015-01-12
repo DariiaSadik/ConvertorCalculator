@@ -72,12 +72,6 @@ public class PolishStrategy {
             if (isDelim(c))
                 continue;
             String conversion = "";
-            /* Вот с этого момента у мен начинаются проблемы. если ввести
-            * toDollar((5euro+5euro)) то все хорошо
-            * но как только toDollar((5euro+5euro)*5) или еще сложнее у меня не получается выводит
-            * ошибку NoSuchElementException
-            * и еще в классе Currency я написала форматирование, но вот как правильно его
-            * вызвать я не знаю, точнее где правильно его вызвать*/
             if(Character.isAlphabetic(s.charAt(i))) {
                 while (i < s.length() && Character.isAlphabetic(s.charAt(i))) {
                     conversion += s.charAt(i++);
@@ -86,15 +80,14 @@ public class PolishStrategy {
             } else if (c == '(') {
                 op.add("(");
             } else if (c == ')') {
-                if (op.getLast().contains("to")) {
-                        st.add(new ConversionImpl().converting((Currency) st.removeLast(), op.removeLast()));
+                while (!(op.getLast().contains("to") || op.getLast().equals("("))) {
+                    processOperator(st, op.removeLast());
+                }
+                if (op.getLast().contains("to")){
+                    st.add(new ConversionImpl().converting((Currency) st.removeLast(), op.removeLast()));
                 } else {
-                    while (!op.getLast().equals("(")){
-                        processOperator(st, op.removeLast());
-                    }
                     op.removeLast();
                 }
-                /*----------------------------------------------------------------------------------------*/
             } else if (isOperator(c)) {
                 while (!op.isEmpty() && priority(op.getLast()) >= priority(c + "")) {
                     processOperator(st, op.removeLast());
@@ -120,7 +113,6 @@ public class PolishStrategy {
                 --i;
             }
         }
-            /*и правльно ли сдесь или нет*/
         while (!op.isEmpty()) {
             if (op.getLast().contains("to")) {
                 new ConversionImpl().converting((Currency) st.removeLast(), op.removeLast());
@@ -129,9 +121,5 @@ public class PolishStrategy {
             }
         }
         return st.get(0);  // возврат результата
-    }
-
-    public static void main(String[] args) throws WrongCalculationOperator, ConversionException {
-        System.out.println(eval("toDollar((5euro+5euro)*5)"));
     }
 }

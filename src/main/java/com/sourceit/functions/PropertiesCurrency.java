@@ -42,8 +42,4 @@ public class PropertiesCurrency {
         }
         return function;
     }
-    public static void main(String[] args) {
-        PropertiesCurrency test = new PropertiesCurrency();
-        System.out.println(test.parseString());
-    }
 }
